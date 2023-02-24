@@ -11,7 +11,7 @@ exports.pet = async (req, res, next) => {
 };
 
 
-exports.showOne = async (req, res, next) => {
+exports.getproductOne = async (req, res, next) => {
     try {
         const { id } = req.params
         const pet = await Pet.findById(id).populate("product");
@@ -56,7 +56,7 @@ exports.insertpet = async (req, res, next) => {
     });
 };
 
-//insert
+//insert product
 exports.insert = async (req, res, next) => {
     try {
         const { id } = req.params;
