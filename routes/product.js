@@ -7,22 +7,19 @@ const {body}= require("express-validator")
 
 // pet //
 //insert
-router.post ("/",productController.insertpet);
+router.post ("/",[passport.islogin,checkadmin.isAdmin],productController.insertpet);
 //show pet
 router.get("/", productController.pet);
 
 // Product //
 //insert product
-router.post ("/:id",productController.insert);
+router.post ("/:id",[passport.islogin,checkadmin.isAdmin],productController.insert);
 //Show product by ID
-router.get("/:id", productController.show);
-//show all 
-router.get("/",productController.showall);
+router.get("/:id",productController.show);
 //delete
-router.delete ("/:id",productController.destroy);
+router.delete ("/:id",[passport.islogin,checkadmin.isAdmin],productController.destroy);
 //update
-router.put ('/:id',productController.update)
+router.put ('/:id',[passport.islogin,checkadmin.isAdmin],productController.update)
 
 module.exports = router;
 
-//,[passport.islogin,checkadmin.isAdmin]

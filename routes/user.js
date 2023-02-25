@@ -6,7 +6,7 @@ const checkadmin = require("../middleware/checkAdmin")
 const { body } = require('express-validator')
 
 
-router.get("/", usersController.showall);
+router.get("/",[passport.islogin,checkadmin.isAdmin], usersController.showall);
 
 router.post("/", [
     body('name').not().isEmpty().withMessage("Please enter your name").isLength({ min: 3 }).withMessage("The name must be more than 3 characters."),
