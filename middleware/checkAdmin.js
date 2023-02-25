@@ -6,7 +6,7 @@ module.exports.isAdmin = (req,res,next) => {
  }else{
     return res.status(403).json({
         error:{
-            message:'Only Admin!!'
+            message:'You are not Admin'
         }
  })
 }};

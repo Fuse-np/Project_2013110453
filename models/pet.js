@@ -12,9 +12,9 @@ const petschema = new Schema(
     });
 
     petschema.virtual("pets", {
-    ref: "Pet",
+    ref: "Product",
     localField: "_id",
-    foreignField: "product",
+    foreignField: "pet",
 });
 const pet = mongoose.model("Pet", petschema);
 

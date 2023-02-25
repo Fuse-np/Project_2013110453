@@ -1,7 +1,8 @@
 const Product = require('../models/product')
 const Pet = require('../models/pet');
+const product = require('../models/product');
 
-
+// pet // 
 //get pet
 exports.pet = async (req, res, next) => {
     const pet = await Pet.find();
@@ -9,6 +10,21 @@ exports.pet = async (req, res, next) => {
         pet: pet,
     });
 };
+
+//Insert pet
+exports.insertpet = async (req, res, next) => {
+
+    const { name } = req.body;
+    const pet = new Pet({
+        name: name
+    });
+    await pet.save();
+
+    res.status(200).json({
+        message: "Add Pet successfully",
+    });
+};
+
 
 
 exports.getproductOne = async (req, res, next) => {
@@ -28,34 +44,7 @@ exports.getproductOne = async (req, res, next) => {
     }
 }
 
-exports.Product = async (req, res, next) => {
-    const { id } = req.params;
-    const product = await product.findById(id);
-    const pet = await pet.find();
-    if (!pet) {
-        res.status(200).json({
-            message: "Data not found",
-        });
-    }
-    res.status(200).json({
-        goods: good,
-    });
-};
-
-//Insert pet
-exports.insertpet = async (req, res, next) => {
-
-    const { name } = req.body;
-    const pet = new Pet({
-        name: name
-    });
-    await pet.save();
-
-    res.status(200).json({
-        message: "Add Data Already",
-    });
-};
-
+// Product //
 //insert product
 exports.insert = async (req, res, next) => {
     try {
@@ -79,58 +68,82 @@ exports.insert = async (req, res, next) => {
         });
         await product.save();
         res.status(200).json({
-            message: "Add Data Already",
+            message: "Product added successfully",
         });
     } catch (error) {
         next(error);
     }
 };
 
-//delete
-exports.delete = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const pet = await Pet.deleteOne({ _id: id });
-        
-        if (pet.deletedCount === 0) {
-            const error = new Error("Can't found data");
-            error.statusCode = 400;
-            throw error;
-        } else {
-            res.status(200).json({
-                message: "Delete Already!!"
-            });
-        }
-    } catch (error) {
-        next(error);
+exports.Product = async (req, res, next) => {
+    const { id } = req.params;
+    const pet = await Pet.findById(id);
+    const product = await Product.find();
+    if (!pet) {
+        res.status(200).json({
+            message: "Data not found",
+        });
     }
+    res.status(200).json({
+        products: product,
+    });
 };
 
 //update
 exports.update = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const { pets, type, color, price, size ,productstatus } = req.body;
-        const pet = await Pet.findOne({ _id: id });
-        if (!pet) {
-            const error = new Error("Can't update");
-            error.statusCode = 200;
-            throw error;
-        } else {
-            pet.type = type;
-            pet.color = color;
-            pet.price = price;
-            pet.size = size;
-            pet.productstatus = productstatus;
-            pet.pet = pets;
-
-            await pet.save();
-            res.status(200).json({
-                maessge: "Update data already!!",
-            });
-        }
-    } catch (error) {
-        next(error);
+      const { id } = req.params;
+      const { pets, type, color, price, size ,productstatus } = req.body;
+      const product = await Product.updateOne({ _id: id }, { pets, type, color, price, size ,productstatus })
+      if (product.matchedCount === 0) {
+        const error = new Error('Product not found')
+        error.statusCode = 404
+        throw error
+      } 
+      res.status(200).json({ message: 'Product updated successfully' })
+    } catch (err) {
+      next(err)
     }
-};
+  }
+
+//Show by ID
+   exports.show = async (req, res, next) => {
+    try {
+      const product = await Product.findById(req.params.id)
+      if (!product) {
+        const error = new Error('Product not found')
+        error.statusCode = 404
+        throw error
+      }
+      res.send({ data: product })
+    } catch (err) {
+      next(err)
+    }
+  }
+
+//show all
+  exports.showall = async (req, res, next) => {
+    const product = await Product.find()
+    res.status(200).json({
+        product: product
+    })
+}
+  
+//delete
+exports.destroy = async (req, res) => {
+    try {
+      const { id } = req.params
+      const product = await Product.deleteOne({ _id: id })
+      console.log(product)
+      if (product.deletedCount === 0) {
+        const error = new Error('Product not found')
+        error.statusCode = 404
+        throw error
+      } 
+      res.status(200).json({ message: 'Product deleted successfully' })
+    } catch (err) {
+      res.status(404).json({ message: 'error : ' + err.message })
+    }
+  }
+
 

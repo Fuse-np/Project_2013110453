@@ -3,7 +3,7 @@ const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken")
 const config = require("../config/index")
 
-exports.showuser = async (req, res, next) => {
+exports.showall = async (req, res, next) => {
     const user = await User.find()
     res.status(200).json({
         user: user

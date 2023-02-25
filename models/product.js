@@ -7,7 +7,7 @@ const productschema = new Schema({
     price: {type:Number},
     size: {type:String},
     productstatus: {type: String},
-    pet_id:{ type: Schema.Types.ObjectId, ref: "pet" },
+    pet:{ type: Schema.Types.ObjectId, ref: "Pet" },
 },
 {
   toJSON: { virtuals: true },
